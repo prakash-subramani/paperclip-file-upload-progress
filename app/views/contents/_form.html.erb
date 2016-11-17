@@ -16,12 +16,41 @@
       <%= f.text_field :name %>
     </div>
 
-    <div class="field">
-      <%= f.label :attachment %>
-      <%= f.file_field :attachment %>
-    </div>
-
-    <div class="actions">
-      <%= f.submit %>
-    </div>
+    <div id="fileUpload"></div>
 <% end %>
+
+<button type="submit" id="save">Save</button>
+
+<script>
+
+  $(document).ready(function () {
+
+    var fileUpload = $("#fileUpload").uploadFile({
+      url: "/contents",
+      multiple: false,
+      fileName: "content[attachment]",
+      autoSubmit: false,
+      showCancel: false,
+      showAbort: false,
+      dragDrop: true,
+      maxFileCount: 1,
+      showPreview: true,
+      showProgress: true,
+      showStatusAfterSuccess: true,
+      dynamicFormData: function () {
+        var name = $('#content_name').val();
+        var data = {"content[name]": name};
+        return data;
+      }
+    });
+
+    $("#save").click(function (e) {
+      $("#save").prop("disabled", true);
+      fileUpload.startUpload();
+      e.preventDefault();
+    });
+
+
+  });
+
+</script>
